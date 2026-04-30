@@ -8,12 +8,11 @@
 
 ### 📌 Description
 
-This project uses OpenCV for computer vision and MediaPipe to track hand landmarks and identify signs of the Spanish Sign Language (LSE) alphabet
-
+This project uses OpenCV for computer vision and MediaPipe to track hand landmarks and identify signs of the Spanish Sign Language (LSE) alphabet.
 Currently it can detect every letter that is signed with a static gesture (no movement during the sign), except the letter T due to limitations in the MediaPipe ability to propertly detect the hand during that position.
 Current letters available: A, B, C, D, E, F, G, I, K, L, M, N, O, P, Q, R, S, U, W
 Missing letters: H, J, LL, RR, T, V, X, Y, Z
----
+
 
 ### 🧠 How it works
 
@@ -79,22 +78,17 @@ Actualmente puede detectar todas las letras que se signan con un gesto estático
 
 Letras disponibles actualmente: A, B, C, D, E, F, G, I, K, L, M, N, O, P, Q, R, S, U, W
 Letras aún sin añadir: H, J, LL, RR, Ñ, T, V, X, Y, Z
-Combina:
----
 
 ### 🧠 Como funciona
 
 * Cuando el program detecta una mano en la pantalla Mediapipe obtiene 21 puntos de referencia (x,y,z)
 * Usando la posición relativa de estos puntos de referencia el programa intenta asignar al gesto obtenido una letra usando el alfabeto dactilologico del LSE.
 --- 
-
-
 ### 🚀 Características
 
 * Seguimiento de manos en tiempo real
 * Visualización de puntos y conexiones
 * Reconocimiento de gestos estáticos
-
 
 ---
 
