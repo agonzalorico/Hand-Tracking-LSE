@@ -116,12 +116,6 @@ pip install -r requirements.txt
 
 ---
 
-### ▶️ Uso
-
-```bash
-python main.py
-```
-
 ---
 
 ### 🤝 Contribuciones
