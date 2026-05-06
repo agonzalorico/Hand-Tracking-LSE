@@ -51,6 +51,20 @@ def get_distance(point1, point2):
     distance = int(math.sqrt(((y1-y2)**2)+((x1-x2)**2)))
     return distance
 
+#Returns true if point1 is higher than point 2
+def is_higher(point1, point2):
+
+    if hand_landmarks[point1].y < hand_landmarks[point2].y:
+        return True
+    else: return False
+
+def is_more_left(point1, point2):
+
+    if hand_landmarks[point1].x < hand_landmarks[point2].x:
+        return True
+    else: return False
+
+
 #This sets of function check the points of the hand and  compare them with some conditions to see if they are the letter investigated
 #This is not very efficient and should be changed in the future, maybe combining all of them or just a few into a single function
 #The comparison of hand_landmarks might also be modified, putting them into a separate function with a clearer explanation of what is comparing
@@ -87,9 +101,9 @@ def check_D():
         return False
     
 def check_C():
-    touching = tips_touching(8,20)
+    touching = tips_touching(8,16)
     distanciax = (hand_landmarks[0].x * frame.shape[1]) - (hand_landmarks[20].x*frame.shape[1])
-    if hand_landmarks[8].x < hand_landmarks[6].x and hand_landmarks[8].y < hand_landmarks[4].y and touching == True and distanciax >10:
+    if hand_landmarks[8].x < hand_landmarks[6].x and hand_landmarks[8].y < hand_landmarks[4].y and touching == True and distanciax >10 and hand_landmarks[10].y < hand_landmarks[9].y:
         return True
     else: return False
 def check_E():
@@ -107,7 +121,7 @@ def check_E():
 def check_F():
     tips = [12, 16, 20]
     for i in tips:
-        if hand_landmarks[i].y < hand_landmarks[i-2].y:
+        if hand_landmarks[i].y < hand_landmarks[i-2].y and hand_landmarks[12].y < hand_landmarks[6].y:
             pass
         else: return False 
     if hand_landmarks[8].x < hand_landmarks[4].x and hand_landmarks[8].z <hand_landmarks[4].z:
@@ -115,8 +129,8 @@ def check_F():
     else: return False
 
 def check_I():
-    if hand_landmarks[2].x < hand_landmarks[17].x and hand_landmarks[8].y > hand_landmarks[8-2].y:
-        if hand_landmarks[20].y < hand_landmarks[20-2].y and hand_landmarks[16].y > hand_landmarks[16-2].y:
+    if hand_landmarks[2].x < hand_landmarks[17].x and hand_landmarks[8].y > hand_landmarks[8-2].y and hand_landmarks[4].y < hand_landmarks[2].y:
+        if hand_landmarks[20].y < hand_landmarks[20-2].y and hand_landmarks[16].y > hand_landmarks[16-2].y and hand_landmarks[12].y > hand_landmarks[12-2].y:
             return True
         else: return False
     else: return False
@@ -130,13 +144,14 @@ def check_K():
 
 def check_L():
     touching = tips_touching(4,12)
+
     if hand_landmarks[4].y<hand_landmarks[10].y:
         return False
     tips = [12,16,20]
     for i in tips:
-        if hand_landmarks[i].y < hand_landmarks[i].y:
+        if hand_landmarks[i].y < hand_landmarks[i-2].y:
             return False
-    if hand_landmarks[4].x < hand_landmarks[2].x and hand_landmarks[8].y < hand_landmarks[8-2].y and hand_landmarks[4].x < hand_landmarks[8].x:                
+    if hand_landmarks[4].x < hand_landmarks[2].x and hand_landmarks[8].y + 0.05 < hand_landmarks[8-2].y and hand_landmarks[4].x < hand_landmarks[8].x:                
         if touching == False:
             return True
     return False
@@ -224,7 +239,11 @@ def check_W():
     else: return False
 def check_G():
     tip_ids = [12, 16, 20]
-    if hand_landmarks[8].x<hand_landmarks[8-2].x:
+
+    if hand_landmarks[8].x + 0.05 <hand_landmarks[8-2].x:
+        pass
+    else: return False
+    if hand_landmarks[20].y + 0.05>hand_landmarks[20-2].y:
         pass
     else: return False
     for tip in tip_ids:
@@ -233,6 +252,9 @@ def check_G():
         else:
             return False
     return True   
+
+previous_letter = ""
+contador = 0
 
 
 #This is the main loop
@@ -295,17 +317,24 @@ while True:
             leterS= check_S()
             leterU = check_U()
             leterW = check_W()
-
+            
             letras_diccionario = {"A":leterA, "B":leterB,"C":leterC, "D":leterD, "E":leterE,"F":leterF,
                                    "G":leterG, "I":leterI, "K":leterK, "L":leterL, "M":leterM, "N":leterN,
                                    "O":leterO, "P":leterP,"Q":leterQ, "R":leterR,"S":leterS, "U":leterU, "W":leterW}
-
             for letra, valor in letras_diccionario.items():
                 if valor == True:
-                    #print(letra)
+                    current_letter = letra
                     cv2.putText(frame, f"Letra: {letra}", (20, 60),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1.5, (0, 255, 0), 3) 
+                    if current_letter == previous_letter:
+                        contador+=1
+                        if contador == 11:
+                            print(letra)
+                    else:
+                        contador = 0
+                    previous_letter = current_letter
+
 
     cv2.putText(frame, f"Para salir pulsa la tecla q", (0, 450),
                     cv2.FONT_HERSHEY_SIMPLEX,
